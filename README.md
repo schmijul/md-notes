@@ -1,6 +1,6 @@
 # md-notes
 
-md-notes is a local Markdown notes app for the desktop. Its interface is inspired by iOS Notes, while the editor switches each line between Markdown source and rendered preview.
+md-notes is a local Markdown notes app for the desktop. Its focused interface lets the editor switch each line between Markdown source and rendered preview.
 
 ![md-notes main view](docs/screenshots/main-editor.png)
 

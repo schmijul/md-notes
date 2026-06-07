@@ -32,7 +32,7 @@ The top toolbar contains only global actions:
 
 ## Visual System
 
-The design is inspired by iOS Notes without copying it:
+The visual system is designed for focused, low-distraction writing:
 
 - Clean white and cool grey surfaces in light mode
 - Serif type for content and headings

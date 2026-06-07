@@ -1,6 +1,6 @@
 :root {
-  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
-  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+  --font-text: system-ui, "Segoe UI", sans-serif;
+  --font-display: system-ui, "Segoe UI", sans-serif;
   font-family: var(--font-text);
   color: var(--ink);
   background: var(--sidebar);
