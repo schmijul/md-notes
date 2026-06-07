@@ -120,6 +120,7 @@ h1, h2, h3, p { margin-top: 0; }
 .rendered-line blockquote { margin: 4px 0; padding: 4px 14px; border-left: 3px solid var(--accent); color: var(--muted); }
 .rendered-line code { padding: 2px 4px; border-radius: 4px; background: var(--code); font-size: .85em; }
 .rendered-line a { color: var(--accent-strong); }
+.rendered-line img { display: block; max-width: 100%; height: auto; margin: 8px 0; border-radius: 8px; }
 .empty-line { color: transparent; font-size: 12px; }
 .editor-line:hover .empty-line { color: var(--subtle); }
 .add-line { margin-top: 15px; padding: 5px 0; border: 0; color: transparent; background: transparent; cursor: text; font-size: 11px; }

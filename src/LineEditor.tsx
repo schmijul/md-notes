@@ -1,3 +1,4 @@
+import { convertFileSrc } from "@tauri-apps/api/core";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -5,9 +6,29 @@ import remarkGfm from "remark-gfm";
 type Props = {
   lines: string[];
   onChange: (lines: string[]) => void;
+  sourcePath?: string;
 };
 
-export function LineEditor({ lines, onChange }: Props) {
+function resolveImageSource(src: string | undefined, sourcePath: string | undefined) {
+  if (!src || !sourcePath || !("__TAURI_INTERNALS__" in window)) return src;
+  const windowsPath = /^[A-Za-z]:[\\/]/.test(src);
+  const nonFileUrl = /^[A-Za-z][A-Za-z\d+.-]*:/.test(src) && !/^file:\/\//i.test(src);
+  if ((!windowsPath && nonFileUrl) || src.startsWith("//")) return src;
+
+  let imagePath = src;
+  if (/^file:\/\//i.test(src)) {
+    imagePath = decodeURIComponent(new URL(src).pathname);
+    if (/^\/[A-Za-z]:\//.test(imagePath)) imagePath = imagePath.slice(1);
+  } else if (!src.startsWith("/") && !/^[A-Za-z]:[\\/]/.test(src) && !src.startsWith("\\\\")) {
+    const separator = sourcePath.includes("\\") ? "\\" : "/";
+    const directoryEnd = Math.max(sourcePath.lastIndexOf("/"), sourcePath.lastIndexOf("\\"));
+    imagePath = `${sourcePath.slice(0, directoryEnd + 1)}${src.replace(/[\\/]/g, separator)}`;
+  }
+
+  return convertFileSrc(imagePath);
+}
+
+export function LineEditor({ lines, onChange, sourcePath }: Props) {
   const [activeLine, setActiveLine] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -81,7 +102,14 @@ export function LineEditor({ lines, onChange }: Props) {
           ) : (
             <button className="rendered-line" type="button" onClick={() => setActiveLine(index)}>
               {line ? (
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{line}</ReactMarkdown>
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    img: ({ src, ...props }) => <img {...props} src={resolveImageSource(src, sourcePath)} />,
+                  }}
+                >
+                  {line}
+                </ReactMarkdown>
               ) : (
                 <span className="empty-line">Click to write</span>
               )}
