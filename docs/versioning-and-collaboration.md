@@ -41,7 +41,22 @@ If the same ID exists with different content, the app displays both versions lin
 
 Before merging, the app saves the local state as **Before shared merge**. This makes an incorrect conflict decision recoverable.
 
-## Why No Real-Time Synchronization Yet?
+## Direct Peer Synchronization
+
+Two running app instances can exchange their complete local note snapshots directly over TCP. No account or central service is involved.
+
+![Direct peer synchronization](screenshots/peer-sync.jpg)
+
+- Both devices use the same pairing key.
+- The peer address is stored locally and retried every 30 seconds.
+- Notes remain available and editable while the peer is offline.
+- Unknown notes are added automatically.
+- Differing known notes use the existing visual conflict dialog.
+- Deletions are not propagated in the first version.
+
+The built-in transport is authenticated by the pairing key but is not encrypted. Use it on a trusted LAN or through an encrypted private network such as Tailscale. Direct internet use otherwise requires port forwarding.
+
+## Why No Real-Time Editing Yet?
 
 True multi-user editing requires discovery, transport, session identity, change ordering, reconnection, and conflict semantics. A CRDT would substantially increase the MVP's scope without improving validation of the visible core idea.
 
@@ -51,14 +66,4 @@ Share codes test the important product questions first:
 - Is the visual merge understandable?
 - Is account-free sharing sufficient for the intended context?
 
-## Planned LAN Extension
-
-The next collaboration step can be implemented without a central account service:
-
-1. One device starts a local session through a Tauri command.
-2. The app displays an IP address, a short-lived code, and optionally a QR code.
-3. Participants connect through WebSocket on the same LAN.
-4. Changes are initially transferred as complete, versioned note states.
-5. Concurrent changes enter the existing visual conflict dialog.
-
-A documented CRDT should only be introduced if simultaneous typing becomes a real requirement. For small note-sharing groups, the simpler snapshot model is easier to operate and explain.
+A documented CRDT should only be introduced if simultaneous typing becomes a real requirement. For small note-sharing groups, the snapshot model is easier to operate and explain.

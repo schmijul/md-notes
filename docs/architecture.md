@@ -24,7 +24,6 @@ src/
   HistoryPanel.tsx        Versions and visual comparison
   ShareDialog.tsx         Share-code creation and import
   ConflictDialog.tsx      Line-by-line conflict resolution
-  file-api.ts             Native Markdown file dialogs and commands
   note-utils.ts           Titles, previews, versions, and codes
   storage.ts              Local storage and sample data
   styles.css              Complete visual system
@@ -36,7 +35,7 @@ docs/                      Product and technical documentation
 
 ## Data Model
 
-A note contains a stable ID, timestamps, an array of Markdown lines, and up to 40 local versions. Each version contains a copy of the lines, a timestamp, and a short label. Notes opened from disk also keep their source path and line-ending style.
+A note contains a stable ID, timestamps, an array of Markdown lines, and up to 40 local versions. Each version contains a copy of the lines, a timestamp, and a short label.
 
 Line-based storage is intentionally direct: it matches the editor interaction and makes comparisons and conflict decisions understandable. This MVP does not need a more complex document model.
 
@@ -50,18 +49,23 @@ Line-based storage is intentionally direct: it matches the editor interaction an
 
 ## Native Boundary
 
+The Rust side starts the Tauri window and provides a small TCP transport for peer synchronization. React sends the current local note snapshot to Rust, while incoming snapshots are emitted back to React for local persistence and conflict handling. The native layer does not merge or own notes.
+
 Ordinary Markdown files use the native Tauri open/save dialogs. Two focused commands read UTF-8 text from a selected path and write it back. The React note keeps the selected path and original LF or CRLF line ending, while its local copy and version history continue to use WebView `localStorage`.
+
+Each app listens on TCP port `45123`. A connection exchanges complete snapshots after verifying a shared pairing key. The saved peer address is retried every 30 seconds, so edits remain local while the other device is unavailable and are exchanged once both devices are reachable again.
 
 ## Portability
 
-Tauri supports Linux, Windows, and macOS with the same frontend. The main platform-specific concerns are build dependencies and installers. The UI does not use Linux-specific APIs. Tauri 2 also supports mobile targets, although the two-column interface will need a dedicated responsive navigation pattern before a mobile build.
+Tauri supports Linux, Windows, macOS, Android, and iOS with the same frontend. The phone layout replaces the two-column interface with a notes drawer, compact toolbar, full-width editor, and mobile dialogs. Native Android and iOS project generation, permissions, packaging, and physical-device network behavior still require platform-specific verification.
 
 ## Security Assumptions
 
 - No remote content is loaded.
 - Markdown is rendered as React components; raw HTML is disabled.
 - Share codes are Base64-encoded, not encrypted.
-- The app does not send data over the network.
+- Peer synchronization only sends data when a peer address and matching pairing key are configured.
+- The pairing key authenticates a peer but does not encrypt traffic. An encrypted private network is required outside a trusted LAN.
 
 ## Deliberate MVP Non-Goals
 
