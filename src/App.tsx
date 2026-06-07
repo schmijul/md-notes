@@ -345,7 +345,12 @@ export default function App() {
               <span>{formatListDate(selectedNote.updatedAt)}</span>
               <span>{selectedNote.lines.join(" ").trim().split(/\s+/).filter(Boolean).length} words</span>
             </div>
-            <LineEditor key={selectedNote.id} lines={selectedNote.lines} onChange={updateLines} />
+            <LineEditor
+              key={selectedNote.id}
+              lines={selectedNote.lines}
+              sourcePath={selectedNote.sourcePath}
+              onChange={updateLines}
+            />
           </article>
         </div>
       </section>
