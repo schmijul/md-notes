@@ -11,6 +11,8 @@ export type Note = {
   updatedAt: string;
   lines: string[];
   versions: NoteVersion[];
+  sourcePath?: string;
+  lineEnding?: "\n" | "\r\n";
 };
 
 export type ConflictChoice = "local" | "incoming" | "both";

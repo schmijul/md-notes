@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decodeNote, encodeNote, notePreview, noteTitle, sameLines } from "./note-utils";
+import { decodeNote, encodeNote, joinMarkdown, notePreview, noteTitle, sameLines, splitMarkdown } from "./note-utils";
 import type { Note } from "./types";
 
 const note: Note = {
@@ -29,5 +29,13 @@ describe("note utilities", () => {
   it("compares lines exactly", () => {
     expect(sameLines(["a", "b"], ["a", "b"])).toBe(true);
     expect(sameLines(["a"], ["A"])).toBe(false);
+  });
+
+  it("preserves Markdown line endings and a final newline", () => {
+    const markdown = "# Title\r\n\r\nText\r\n";
+    const { lines, lineEnding } = splitMarkdown(markdown);
+
+    expect(lines).toEqual(["# Title", "", "Text", ""]);
+    expect(joinMarkdown(lines, lineEnding)).toBe(markdown);
   });
 });

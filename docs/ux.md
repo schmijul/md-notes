@@ -25,7 +25,10 @@ The left column contains search and the notes list. The active note is highlight
 The top toolbar contains only global actions:
 
 - Show or hide the sidebar
+- Open a Markdown file
+- Save or save a Markdown file under a new name
 - Open History
+- Open peer synchronization
 - Share the note
 - Delete the note
 - Switch between light and dark mode
@@ -54,6 +57,26 @@ History opens as a side panel so the current text remains visible. Changed lines
 ![Share-code dialog](screenshots/share-code.png)
 
 The dialog separates **Send** and **Receive**. It clearly explains that the code contains readable note data and does not provide automatic synchronization. This avoids false expectations about privacy or real-time collaboration.
+
+## Markdown Files
+
+![Opening and saving Markdown files](screenshots/markdown-files.png)
+
+The desktop toolbar can open ordinary `.md` and `.markdown` files. **Save** writes an opened file back to its existing path; **Save as** asks for a new path. Internal notes can also be exported through either save action. File dialogs are native desktop functionality and are not available in the browser-only development view.
+
+## Synchronization
+
+![Peer synchronization dialog](screenshots/peer-sync.jpg)
+
+The Sync dialog keeps account-free operation explicit. It shows the local address, stores one peer address, and requires the same pairing key on both devices. The toolbar status distinguishes local changes, active synchronization, an unreachable peer, completed synchronization, and conflicts that need review.
+
+## Mobile Layout
+
+At phone widths, the notes list becomes a drawer opened from the toolbar. Global actions use accessible icon buttons, the editor fills the screen width, and history, sharing, synchronization, and conflict views adapt to the available viewport.
+
+![Mobile editor](screenshots/mobile-editor.jpg)
+
+See [Mobile App](mobile.md) for native platform status and setup.
 
 ## Accessibility
 
