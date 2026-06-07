@@ -1,0 +1,27 @@
+import { describe, expect, it } from "vitest";
+import { decodeNote, encodeNote, notePreview, noteTitle, sameLines } from "./note-utils";
+import type { Note } from "./types";
+
+const note: Note = {
+  id: "note-1",
+  createdAt: "2026-06-07T10:00:00.000Z",
+  updatedAt: "2026-06-07T10:00:00.000Z",
+  lines: ["# Trip ideas", "Visit **Lisbon** in autumn."],
+  versions: [],
+};
+
+describe("note utilities", () => {
+  it("creates list labels from Markdown", () => {
+    expect(noteTitle(note.lines)).toBe("Trip ideas");
+    expect(notePreview(note.lines)).toBe("Visit Lisbon in autumn.");
+  });
+
+  it("round-trips share codes", () => {
+    expect(decodeNote(encodeNote(note))).toEqual(note);
+  });
+
+  it("compares lines exactly", () => {
+    expect(sameLines(["a", "b"], ["a", "b"])).toBe(true);
+    expect(sameLines(["a"], ["A"])).toBe(false);
+  });
+});
