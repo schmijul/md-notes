@@ -1,31 +1,31 @@
 # Paper Trail
 
-Paper Trail ist eine lokale Markdown-Notizen-App für den Desktop. Die Oberfläche ist von iOS Notes inspiriert, während der Editor Markdown zeilenweise zwischen Quelltext und Vorschau wechseln lässt.
+Paper Trail is a local Markdown notes app for the desktop. Its interface is inspired by iOS Notes, while the editor switches each line between Markdown source and rendered preview.
 
-![Paper Trail Hauptansicht](docs/screenshots/main-editor.png)
+![Paper Trail main view](docs/screenshots/main-editor.png)
 
-## MVP-Funktionen
+## MVP Features
 
-- Native Desktop-App mit Tauri 2
-- Markdown-Editor mit Live-Rendering pro Zeile
-- Aktive Zeile bleibt als Markdown editierbar
-- Notizenliste, Suche und lokale Speicherung
-- Automatische Versionen nach kurzen Schreibpausen
-- Visueller Vergleich und Wiederherstellung
-- Accountloses Teilen per kopierbarem Share-Code
-- Zeilenweise Konfliktlösung beim Import geänderter Notizen
+- Native desktop app built with Tauri 2
+- Line-based Markdown editor with live rendering
+- The active line remains editable as Markdown
+- Notes list, search, and local storage
+- Automatic versions after short editing pauses
+- Visual comparison and restoration
+- Account-free sharing through portable share codes
+- Line-by-line conflict resolution when importing changed notes
 
-![Visueller Versionsvergleich](docs/screenshots/version-history.png)
+![Visual version comparison](docs/screenshots/version-history.png)
 
-## Schnellstart
+## Quick Start
 
-Voraussetzungen:
+Requirements:
 
-- Node.js 20 oder neuer
-- Rust 1.77 oder neuer
-- Linux-Pakete für Tauri/WebKitGTK
+- Node.js 20 or newer
+- Rust 1.77 or newer
+- Linux packages required by Tauri and WebKitGTK
 
-Unter Ubuntu/Debian:
+On Ubuntu or Debian:
 
 ```bash
 sudo apt update
@@ -33,59 +33,59 @@ sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file \
   libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
 ```
 
-Abhängigkeiten installieren und Frontend starten:
+Install dependencies and start the frontend:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Native Desktop-App im Entwicklungsmodus starten:
+Start the native desktop app in development mode:
 
 ```bash
 npm run tauri dev
 ```
 
-Linux-Produktionspakete (`.deb` und `.rpm`) erstellen:
+Build Linux production packages (`.deb` and `.rpm`):
 
 ```bash
 npm run build:desktop
 ```
 
-Die Pakete landen unter `src-tauri/target/release/bundle/`. Windows- und macOS-Installer werden mit `npm run tauri build` auf dem jeweiligen Betriebssystem erzeugt.
+Packages are written to `src-tauri/target/release/bundle/`. Build Windows and macOS installers with `npm run tauri build` on the respective operating system.
 
-Frontend prüfen:
+Verify the frontend:
 
 ```bash
 npm test
 npm run build
 ```
 
-## Bedienung
+## Usage
 
-1. Eine gerenderte Zeile anklicken, um ihren Markdown-Quelltext zu bearbeiten.
-2. `Enter` drücken, um eine neue Zeile anzulegen. Die vorige Zeile wird sofort gerendert.
-3. Über **History** ältere Stände vergleichen und wiederherstellen.
-4. Über **Share** einen transportierbaren Code kopieren oder einen erhaltenen Code importieren.
+1. Click a rendered line to edit its Markdown source.
+2. Press `Enter` to create a new line. The previous line is rendered immediately.
+3. Open **History** to compare and restore earlier versions.
+4. Open **Share** to copy a portable code or import a code you received.
 
-![Accountloses Teilen per Share-Code](docs/screenshots/share-code.png)
+![Account-free sharing with a share code](docs/screenshots/share-code.png)
 
-## Speicherung
+## Storage
 
-Das MVP speichert Notizen im lokalen Webview-Speicher der Tauri-App. Es gibt keinen Server, keine Anmeldung und keine Telemetrie. Ein Share-Code enthält den Notiztext und bis zu zehn letzte Versionen; wer den Code besitzt, kann diese Daten lesen.
+The MVP stores notes in the Tauri app's local WebView storage. There is no server, account, or telemetry. A share code contains the note text and up to ten recent versions; anyone who has the code can read that data.
 
-## Dokumentation
+## Documentation
 
-- [Architektur](docs/architecture.md)
-- [UX und Bedienkonzept](docs/ux.md)
-- [Versionierung und Kollaboration](docs/versioning-and-collaboration.md)
+- [Architecture](docs/architecture.md)
+- [UX and interaction design](docs/ux.md)
+- [Versioning and collaboration](docs/versioning-and-collaboration.md)
 
-## Aktuelle Grenzen
+## Current Limitations
 
-- Share-Codes sind Momentaufnahmen und synchronisieren nicht automatisch.
-- Echtzeit-LAN-Kollaboration ist noch nicht enthalten.
-- Die lokale Speicherung nutzt noch keine frei wählbare Markdown-Dateiablage.
-- Mobile Builds sind architektonisch möglich, aber nicht Teil dieses MVP.
-- AppImage-Packaging ist noch nicht Teil des verifizierten Linux-Builds; `.deb` und `.rpm` sind geprüft.
+- Share codes are snapshots and do not synchronize automatically.
+- Real-time LAN collaboration is not included yet.
+- Local storage does not yet use a user-selectable Markdown file directory.
+- Mobile builds are architecturally possible but are outside this MVP.
+- AppImage packaging is not part of the verified Linux build; `.deb` and `.rpm` are verified.
 
-Diese Grenzen halten das erste Release klein und testbar. Der nächste sinnvolle Schritt ist ein optionaler lokaler Tauri-Datenspeicher mit Import/Export, danach eine explizit gestartete LAN-Sitzung.
+These limits keep the first release small and testable. The next practical step is an optional local Tauri data store with import and export, followed by explicitly started LAN sessions.

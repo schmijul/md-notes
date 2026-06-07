@@ -1,73 +1,73 @@
-# Architektur
+# Architecture
 
-![Paper Trail Hauptansicht](screenshots/main-editor.png)
+![Paper Trail main view](screenshots/main-editor.png)
 
-## Ziel
+## Goal
 
-Paper Trail soll sich wie eine kleine Desktop-App anfühlen und dennoch ohne plattformspezifische UI-Neuentwicklung auf Linux, Windows und macOS laufen. Das MVP priorisiert eine gute Editor-Interaktion und eine verständliche Versionsansicht.
+Paper Trail should feel like a small desktop app while running on Linux, Windows, and macOS without platform-specific UI implementations. The MVP prioritizes a strong editing interaction and an understandable version history.
 
-## Technologie
+## Technology
 
-- **Tauri 2:** native Desktop-Shell, Packaging und zukünftiger Zugriff auf Dateisystem oder LAN
-- **React + TypeScript:** UI und Zustandsverwaltung
-- **Vite:** Entwicklungsserver und Frontend-Build
-- **react-markdown + remark-gfm:** sichere Markdown-Darstellung inklusive Tabellen und Aufgabenlisten
-- **localStorage:** lokale MVP-Persistenz innerhalb des App-Webviews
-- **Vitest:** fokussierte Tests der Daten- und Share-Code-Logik
+- **Tauri 2:** native desktop shell, packaging, and future access to the file system or LAN
+- **React + TypeScript:** UI and state management
+- **Vite:** development server and frontend build
+- **react-markdown + remark-gfm:** safe Markdown rendering, including tables and task lists
+- **localStorage:** local MVP persistence inside the app WebView
+- **Vitest:** focused tests for note and share-code logic
 
-## Struktur
+## Structure
 
 ```text
 src/
-  App.tsx                 Hauptzustand und Anwendungsabläufe
-  LineEditor.tsx          Zeilenbasierter Markdown-Editor
-  HistoryPanel.tsx        Versionen und visueller Vergleich
-  ShareDialog.tsx         Share-Code erzeugen und importieren
-  ConflictDialog.tsx      Zeilenweise Konfliktauflösung
-  note-utils.ts           Titel, Vorschau, Versionen und Codes
-  storage.ts              Lokale Speicherung und Beispieldaten
-  styles.css              Gesamtes visuelles System
+  App.tsx                 Main state and application flows
+  LineEditor.tsx          Line-based Markdown editor
+  HistoryPanel.tsx        Versions and visual comparison
+  ShareDialog.tsx         Share-code creation and import
+  ConflictDialog.tsx      Line-by-line conflict resolution
+  note-utils.ts           Titles, previews, versions, and codes
+  storage.ts              Local storage and sample data
+  styles.css              Complete visual system
 src-tauri/
-  src/                     Minimale native Tauri-Shell
-  capabilities/            Desktop-Berechtigungen
-docs/                      Produkt- und Technikdokumentation
+  src/                     Minimal native Tauri shell
+  capabilities/            Desktop permissions
+docs/                      Product and technical documentation
 ```
 
-## Datenmodell
+## Data Model
 
-Eine Notiz besteht aus einer stabilen ID, Zeitstempeln, einem Array von Markdown-Zeilen und bis zu 40 lokalen Versionen. Eine Version enthält eine Kopie der Zeilen, einen Zeitstempel und eine kurze Bezeichnung.
+A note contains a stable ID, timestamps, an array of Markdown lines, and up to 40 local versions. Each version contains a copy of the lines, a timestamp, and a short label.
 
-Die zeilenweise Speicherung ist absichtlich direkt: Sie entspricht der Editor-Interaktion und macht Vergleiche sowie Konfliktentscheidungen verständlich. Für dieses MVP ist kein komplexes Dokumentmodell nötig.
+Line-based storage is intentionally direct: it matches the editor interaction and makes comparisons and conflict decisions understandable. This MVP does not need a more complex document model.
 
-## Datenfluss
+## Data Flow
 
-1. `App` lädt alle Notizen einmal aus `localStorage`.
-2. `LineEditor` meldet nach jeder Eingabe das vollständige Zeilenarray zurück.
-3. React aktualisiert die aktive Notiz; ein Effekt schreibt den Zustand lokal.
-4. Nach 1,4 Sekunden Schreibpause wird ein Snapshot erzeugt.
-5. History, Share und Merge arbeiten mit demselben einfachen Datenmodell.
+1. `App` loads all notes once from `localStorage`.
+2. `LineEditor` reports the complete line array after each edit.
+3. React updates the active note, and an effect writes the state locally.
+4. A snapshot is created after a 1.4-second editing pause.
+5. History, sharing, and merging use the same simple data model.
 
-## Native Grenze
+## Native Boundary
 
-Die Rust-Seite startet aktuell nur das Tauri-Fenster. Das ist bewusst minimal. Dateisystemzugriff, Export und ein LAN-Dienst gehören später hinter klar definierte Tauri-Commands, ohne die Editor-Komponenten umzubauen.
+The Rust side currently only starts the Tauri window. This is intentionally minimal. File-system access, export, and a LAN service can later be added behind clearly defined Tauri commands without rebuilding the editor components.
 
-## Portierbarkeit
+## Portability
 
-Tauri unterstützt Linux, Windows und macOS mit demselben Frontend. Plattformabhängig sind primär Build-Pakete und Installer. Die UI nutzt keine Linux-spezifischen APIs. Tauri 2 erlaubt später auch mobile Targets; vor einem mobilen Build braucht die Zweispaltenansicht jedoch ein eigenes responsives Navigationsmuster.
+Tauri supports Linux, Windows, and macOS with the same frontend. The main platform-specific concerns are build dependencies and installers. The UI does not use Linux-specific APIs. Tauri 2 also supports mobile targets, although the two-column interface will need a dedicated responsive navigation pattern before a mobile build.
 
-## Sicherheitsannahmen
+## Security Assumptions
 
-- Keine Remote-Inhalte werden geladen.
-- Markdown wird als React-Komponenten gerendert; rohes HTML ist nicht aktiviert.
-- Share-Codes sind Base64-kodiert, nicht verschlüsselt.
-- Die App sendet selbst keine Daten ins Netzwerk.
+- No remote content is loaded.
+- Markdown is rendered as React components; raw HTML is disabled.
+- Share codes are Base64-encoded, not encrypted.
+- The app does not send data over the network.
 
-## Bewusste Nicht-Ziele des MVP
+## Deliberate MVP Non-Goals
 
-- Kein Benutzerkonto
-- Kein zentraler Sync-Server
-- Kein CRDT oder Operational Transform
-- Keine Plugin-Architektur
-- Kein Rich-Text-Dokumentmodell neben Markdown
+- No user accounts
+- No central synchronization server
+- No CRDT or Operational Transform
+- No plugin architecture
+- No rich-text document model alongside Markdown
 
-Diese Entscheidungen reduzieren Implementierungsrisiko und halten die spätere Migration zu Dateispeicherung oder LAN-Sitzungen offen.
+These decisions reduce implementation risk and keep future migration to file-based storage or LAN sessions open.

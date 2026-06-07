@@ -1,61 +1,61 @@
-# UX und Bedienkonzept
+# UX and Interaction Design
 
-![Zeilenbasierter Editor](screenshots/main-editor.png)
+![Line-based editor](screenshots/main-editor.png)
 
-## Leitidee
+## Guiding Idea
 
-Die App verbindet die Ruhe einer klassischen Notiz-App mit der Präzision von Markdown. Nutzer sollen die meiste Zeit gerenderten Text sehen, ohne zwischen einem Editor- und einem Vorschau-Modus wechseln zu müssen.
+The app combines the calm appearance of a traditional notes app with the precision of Markdown. Users should see rendered text most of the time without switching between separate editor and preview modes.
 
 ## Editor
 
-Nur die aktive Zeile zeigt Markdown-Quelltext. Alle anderen Zeilen werden gerendert.
+Only the active line displays Markdown source. Every other line is rendered.
 
-- Klick auf eine Vorschauzeile aktiviert sie.
-- `Enter` trennt die aktive Zeile an der Cursorposition.
-- `Backspace` am Zeilenanfang verbindet sie mit der vorherigen Zeile.
-- `Pfeil hoch` am Anfang und `Pfeil runter` am Ende wechseln die aktive Zeile.
-- Leere Zeilen behalten anklickbare Höhe, ohne visuell dominant zu werden.
+- Click a preview line to activate it.
+- `Enter` splits the active line at the cursor position.
+- `Backspace` at the start of a line joins it with the previous line.
+- `Arrow Up` at the beginning and `Arrow Down` at the end move between active lines.
+- Empty lines retain a clickable height without becoming visually dominant.
 
-Diese Interaktion ist für kurze Notizen optimiert. Mehrzeilige Markdown-Blöcke wie Codeblöcke werden im MVP nicht als zusammenhängender Block editiert.
+This interaction is optimized for short notes. Multi-line Markdown constructs such as fenced code blocks are not edited as a single block in the MVP.
 
 ## Navigation
 
-Die linke Spalte enthält Suche und Notizen. Die aktive Notiz ist als helle Karte markiert. Titel und Vorschau werden direkt aus dem Markdown abgeleitet, daher braucht es keine separaten Metadatenfelder.
+The left column contains search and the notes list. The active note is highlighted as a light card. Titles and previews are derived directly from Markdown, so separate metadata fields are unnecessary.
 
-Die obere Werkzeugleiste enthält nur globale Aktionen:
+The top toolbar contains only global actions:
 
-- Seitenleiste ein-/ausblenden
-- History öffnen
-- Teilen
-- Notiz löschen
+- Show or hide the sidebar
+- Open History
+- Share the note
+- Delete the note
 
-## Visuelles System
+## Visual System
 
-Die Gestaltung orientiert sich an iOS Notes, ohne sie zu kopieren:
+The design is inspired by iOS Notes without copying it:
 
-- warmes Papierweiß statt reinem Weiß
-- Serifenschrift für Inhalt und Überschriften
-- dezentes Gelb für aktive und primäre Elemente
-- wenig permanente Rahmen
-- kleine Statusinformationen und großzügiger Schreibbereich
+- Warm paper white instead of pure white
+- Serif type for content and headings
+- Subtle yellow for active and primary elements
+- Few persistent borders
+- Small status details and a spacious writing area
 
-## Versionen
+## Versions
 
-![Versionsvergleich](screenshots/version-history.png)
+![Version comparison](screenshots/version-history.png)
 
-History erscheint als seitliches Panel, damit der aktuelle Text sichtbar bleibt. Geänderte Zeilen erhalten einen warmen Hintergrund. Wiederherstellen ist nicht destruktiv: Vor dem Restore wird der aktuelle Stand erneut gesichert.
+History opens as a side panel so the current text remains visible. Changed lines receive a warm background. Restoring is non-destructive: the current state is saved again before the selected version is restored.
 
-## Teilen
+## Sharing
 
-![Share-Code Dialog](screenshots/share-code.png)
+![Share-code dialog](screenshots/share-code.png)
 
-Der Dialog trennt **Send** und **Receive**. Er erklärt direkt, dass der Code lesbare Notizdaten enthält und keine automatische Synchronisierung bietet. Dadurch entstehen keine falschen Erwartungen an Datenschutz oder Echtzeit-Zusammenarbeit.
+The dialog separates **Send** and **Receive**. It clearly explains that the code contains readable note data and does not provide automatic synchronization. This avoids false expectations about privacy or real-time collaboration.
 
-## Barrierefreiheit
+## Accessibility
 
-- Alle zentralen Icon-Schaltflächen haben zugängliche Namen.
-- Eingabefelder sind über Label oder Platzhalter identifizierbar.
-- Status wird nicht ausschließlich durch Farbe kommuniziert.
-- Bedienelemente bleiben mit Tastatur erreichbar.
+- All central icon buttons have accessible names.
+- Input fields are identifiable through labels or placeholders.
+- Status is not communicated through color alone.
+- Controls remain keyboard accessible.
 
-Ein vollständiger Screenreader- und Kontrast-Audit steht vor einem öffentlichen Release noch aus.
+A complete screen-reader and contrast audit is still required before a public release.

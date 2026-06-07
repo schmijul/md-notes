@@ -1,64 +1,64 @@
-# Versionierung und Kollaboration
+# Versioning and Collaboration
 
-![Visuelle Versionskontrolle](screenshots/version-history.png)
+![Visual version control](screenshots/version-history.png)
 
-## Lokale Versionen
+## Local Versions
 
-Nach einer Schreibpause von 1,4 Sekunden erstellt die App einen Snapshot, sofern sich der Text vom letzten Snapshot unterscheidet. Pro Notiz werden maximal 40 lokale Versionen gehalten.
+After a 1.4-second editing pause, the app creates a snapshot when the text differs from the latest snapshot. Each note retains up to 40 local versions.
 
-Der Vergleich arbeitet zeilenweise. Das passt zum Editor und ist für Notizen leichter verständlich als ein klassischer Git-Diff mit technischen Markierungen.
+Comparison works line by line. This matches the editor and is easier to understand for notes than a traditional Git diff with technical markers.
 
-Beim Wiederherstellen:
+When restoring a version:
 
-1. wird der aktuelle Text als **Before restore** gesichert,
-2. wird die ausgewählte Version zum aktuellen Text,
-3. bleibt die Aktion dadurch wieder rückgängig machbar.
+1. the current text is saved as **Before restore**,
+2. the selected version becomes the current text,
+3. the operation therefore remains reversible.
 
-## Share-Code
+## Share Codes
 
-![Share-Code](screenshots/share-code.png)
+![Share code](screenshots/share-code.png)
 
-Ein Share-Code ist ein Base64-kodiertes JSON-Dokument mit:
+A share code is a Base64-encoded JSON document containing:
 
-- Formatkennung
-- Notiz-ID und Zeitstempeln
-- aktuellen Markdown-Zeilen
-- bis zu zehn letzten Versionen
+- a format identifier,
+- the note ID and timestamps,
+- the current Markdown lines,
+- up to ten recent versions.
 
-Der Code kann über Messenger, E-Mail, QR-Code-Generator oder im lokalen Netzwerk transportiert werden. Paper Trail selbst baut im MVP keine Netzwerkverbindung auf.
+The code can be transported through a messenger, email, a QR-code generator, or a local network. Paper Trail itself does not establish a network connection in the MVP.
 
-Base64 ist keine Verschlüsselung. Vertrauliche Notizen dürfen nur über einen entsprechend sicheren Kanal geteilt werden.
+Base64 is not encryption. Confidential notes should only be shared through an appropriately secure channel.
 
-## Import und Konflikte
+## Import and Conflicts
 
-Ist die Notiz-ID auf dem empfangenden Gerät unbekannt, wird die Notiz als neue lokale Notiz angelegt.
+If the receiving device does not know the note ID, the note is added as a new local note.
 
-Existiert dieselbe ID mit abweichendem Inhalt, zeigt die App beide Fassungen pro Zeile. Für jede geänderte Zeile kann gewählt werden:
+If the same ID exists with different content, the app displays both versions line by line. For each changed line, the user can choose to:
 
-- lokale Zeile behalten
-- empfangene Zeile übernehmen
-- beide Zeilen behalten
+- keep the local line,
+- use the incoming line,
+- keep both lines.
 
-Vor dem Merge speichert die App den lokalen Stand als **Before shared merge**. Damit bleibt auch eine falsche Konfliktentscheidung reparierbar.
+Before merging, the app saves the local state as **Before shared merge**. This makes an incorrect conflict decision recoverable.
 
-## Warum noch keine Echtzeit-Synchronisierung?
+## Why No Real-Time Synchronization Yet?
 
-Echte Mehrbenutzerbearbeitung benötigt Discovery, Transport, Sitzungsidentität, Reihenfolge von Änderungen, Wiederverbindung und Konfliktsemantik. Ein CRDT würde das MVP erheblich vergrößern und die sichtbare Kernidee nicht besser validieren.
+True multi-user editing requires discovery, transport, session identity, change ordering, reconnection, and conflict semantics. A CRDT would substantially increase the MVP's scope without improving validation of the visible core idea.
 
-Share-Codes testen zuerst die wichtigen Produktfragen:
+Share codes test the important product questions first:
 
-- Verstehen Nutzer Versionen?
-- Ist der visuelle Merge verständlich?
-- Reicht accountloses Teilen für den Zielkontext?
+- Do users understand versions?
+- Is the visual merge understandable?
+- Is account-free sharing sufficient for the intended context?
 
-## Vorgesehener LAN-Ausbau
+## Planned LAN Extension
 
-Der nächste Kollaborationsschritt kann ohne zentralen Account-Dienst umgesetzt werden:
+The next collaboration step can be implemented without a central account service:
 
-1. Ein Gerät startet über einen Tauri-Command eine lokale Sitzung.
-2. Die App zeigt IP, kurzlebigen Code und optional einen QR-Code.
-3. Teilnehmer verbinden sich per WebSocket im selben LAN.
-4. Änderungen werden zunächst als versionierte, vollständige Notizstände übertragen.
-5. Gleichzeitige Änderungen landen im vorhandenen visuellen Konfliktdialog.
+1. One device starts a local session through a Tauri command.
+2. The app displays an IP address, a short-lived code, and optionally a QR code.
+3. Participants connect through WebSocket on the same LAN.
+4. Changes are initially transferred as complete, versioned note states.
+5. Concurrent changes enter the existing visual conflict dialog.
 
-Erst wenn gleichzeitiges Tippen wirklich erforderlich ist, sollte ein dokumentiertes CRDT eingeführt werden. Für kleine Notizgruppen ist das einfachere Snapshot-Modell leichter zu betreiben und zu erklären.
+A documented CRDT should only be introduced if simultaneous typing becomes a real requirement. For small note-sharing groups, the simpler snapshot model is easier to operate and explain.
