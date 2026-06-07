@@ -1,5 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { decodeNote, encodeNote, joinMarkdown, notePreview, noteTitle, sameLines, splitMarkdown } from "./note-utils";
+import {
+  decodeNote,
+  encodeNote,
+  findMarkdownTables,
+  insertMarkdownTable,
+  joinMarkdown,
+  notePreview,
+  noteTitle,
+  sameLines,
+  splitMarkdown,
+} from "./note-utils";
 import type { Note } from "./types";
 
 const note: Note = {
@@ -37,5 +47,35 @@ describe("note utilities", () => {
 
     expect(lines).toEqual(["# Title", "", "Text", ""]);
     expect(joinMarkdown(lines, lineEnding)).toBe(markdown);
+  });
+
+  it("finds complete GFM table blocks", () => {
+    const lines = [
+      "Before",
+      "| Name | Value |",
+      "| :--- | ---: |",
+      "| Alpha | 1 |",
+      "| Beta | 2 |",
+      "",
+      "After | inline",
+    ];
+
+    expect(findMarkdownTables(lines)).toEqual([{ start: 1, end: 4 }]);
+    expect(findMarkdownTables(["| Value |", "| --- |", "| One |"]))
+      .toEqual([{ start: 0, end: 2 }]);
+  });
+
+  it("inserts a Markdown table at the active line", () => {
+    expect(insertMarkdownTable(["# Title", ""], 1)).toEqual({
+      activeLine: 1,
+      lines: [
+        "# Title",
+        "| Column 1 | Column 2 | Column 3 |",
+        "| --- | --- | --- |",
+        "| Cell | Cell | Cell |",
+      ],
+    });
+
+    expect(insertMarkdownTable(["# Title"], 0).activeLine).toBe(1);
   });
 });

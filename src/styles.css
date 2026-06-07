@@ -88,7 +88,7 @@ h1, h2, h3, p { margin-top: 0; }
 .no-results { padding: 18px 14px; color: var(--muted); font-size: 12px; }
 .sidebar-footer { display: flex; justify-content: space-between; padding: 13px 20px; border-top: 1px solid var(--line); color: var(--subtle); font-size: 10px; }
 
-.workspace { display: flex; min-width: 0; flex-direction: column; background: var(--paper); }
+.workspace { display: flex; min-width: 0; min-height: 0; flex-direction: column; background: var(--paper); }
 .toolbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 58px; padding: 0 16px; border-bottom: 1px solid var(--line); background: var(--paper); }
 .toolbar-center { color: var(--subtle); font-size: 10px; }
 .save-dot { display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: #77a66e; }
@@ -97,7 +97,7 @@ h1, h2, h3, p { margin-top: 0; }
 .tool-button { height: 34px; padding: 0 11px; border: 0; color: var(--muted); background: transparent; font-size: 12px; white-space: nowrap; }
 .tool-button:hover, .tool-button.active { background: var(--hover); }
 .tool-button.accent { color: var(--accent-strong); background: var(--accent-soft); }
-.editor-scroll { flex: 1; overflow: auto; background: linear-gradient(90deg, var(--editor-edge), var(--paper) 15%, var(--paper) 85%, var(--editor-edge)); }
+.editor-scroll { flex: 1; min-height: 0; overflow: auto; background: linear-gradient(90deg, var(--editor-edge), var(--paper) 15%, var(--paper) 85%, var(--editor-edge)); }
 .paper { width: min(760px, calc(100% - 80px)); min-height: 100%; margin: 0 auto; padding: 50px 24px 100px; }
 .note-meta { display: flex; justify-content: center; gap: 12px; margin-bottom: 34px; color: var(--subtle); font-size: 10px; }
 .note-meta span + span::before { content: "·"; margin-right: 12px; }
@@ -117,6 +117,11 @@ h1, h2, h3, p { margin-top: 0; }
 .rendered-line blockquote { margin: 4px 0; padding: 4px 14px; border-left: 3px solid var(--accent); color: var(--muted); }
 .rendered-line code { padding: 2px 4px; border-radius: 4px; background: var(--code); font-size: .85em; }
 .rendered-line a { color: var(--accent-strong); }
+.rendered-line img { display: block; max-width: 100%; height: auto; margin: 8px 0; border-radius: 8px; }
+.rendered-line.table-block { margin: 6px 0; overflow-x: auto; }
+.rendered-line table { width: 100%; border-collapse: collapse; color: var(--ink); font-family: var(--font-text); font-size: 14px; }
+.rendered-line th, .rendered-line td { padding: 8px 10px; border: 1px solid var(--line); text-align: left; }
+.rendered-line th { background: var(--surface-subtle); font-weight: 600; }
 .empty-line { color: transparent; font-size: 12px; }
 .editor-line:hover .empty-line { color: var(--subtle); }
 .add-line { margin-top: 15px; padding: 5px 0; border: 0; color: transparent; background: transparent; cursor: text; font-size: 11px; }
