@@ -292,7 +292,6 @@ export default function App() {
   return (
     <main className={`app-shell ${sidebarOpen ? "" : "sidebar-collapsed"} ${historyOpen ? "history-open" : ""}`}>
       <aside className="sidebar">
-        <div className="window-dots" aria-hidden="true"><i /><i /><i /></div>
         <div className="sidebar-title">
           <div><span className="eyebrow">On this device</span><h1>Notes</h1></div>
           <button className="icon-button" onClick={createNote} aria-label="New note"><FilePlus2 size={19} /></button>
