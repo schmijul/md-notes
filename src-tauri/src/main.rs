@@ -1,3 +1,3 @@
 fn main() {
-    paper_trail_lib::run();
+    md_notes_lib::run();
 }

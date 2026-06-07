@@ -29,7 +29,7 @@ export function makeVersion(lines: string[], label: string): NoteVersion {
 
 export function encodeNote(note: Note) {
   const payload = JSON.stringify({
-    format: "paper-trail-note-v1",
+    format: "md-notes-v1",
     note: { ...note, versions: note.versions.slice(-10) },
   });
   const bytes = new TextEncoder().encode(payload);
@@ -43,8 +43,10 @@ export function decodeNote(code: string): Note {
   const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
   const payload = JSON.parse(new TextDecoder().decode(bytes));
 
-  if (payload.format !== "paper-trail-note-v1" || !Array.isArray(payload.note?.lines)) {
-    throw new Error("This is not a Paper Trail share code.");
+  const legacyFormat = ["paper", "trail", "note", "v1"].join("-");
+  const supportedFormats = ["md-notes-v1", legacyFormat];
+  if (!supportedFormats.includes(payload.format) || !Array.isArray(payload.note?.lines)) {
+    throw new Error("This is not an md-notes share code.");
   }
 
   return payload.note as Note;

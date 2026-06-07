@@ -53,7 +53,7 @@ export function ShareDialog({ note, onClose, onImport }: Props) {
             <p>Paste a code. If this note also exists locally, you can resolve differences before saving.</p>
             <textarea
               className="code-input"
-              placeholder="Paste a Paper Trail share code…"
+              placeholder="Paste an md-notes share code…"
               value={code}
               onChange={(event) => setCode(event.target.value)}
             />

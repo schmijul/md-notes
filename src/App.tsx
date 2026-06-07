@@ -1,4 +1,4 @@
-import { Clock3, FilePlus2, MoreHorizontal, PanelLeftClose, PanelLeftOpen, Search, Share2, Trash2 } from "lucide-react";
+import { Clock3, FilePlus2, Moon, PanelLeftClose, PanelLeftOpen, Search, Share2, Sun, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ConflictDialog } from "./ConflictDialog";
 import { HistoryPanel } from "./HistoryPanel";
@@ -26,6 +26,11 @@ export default function App() {
   const [shareOpen, setShareOpen] = useState(false);
   const [incoming, setIncoming] = useState<Note | null>(null);
   const [notice, setNotice] = useState("");
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const savedTheme = localStorage.getItem("md-notes-theme");
+    if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  });
   const snapshotTimer = useRef<number>();
 
   const selectedNote = notes.find((note) => note.id === selectedId) ?? notes[0];
@@ -37,6 +42,12 @@ export default function App() {
   }, [notes, query]);
 
   useEffect(() => saveNotes(notes), [notes]);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#10151a" : "#f5f7f9");
+    localStorage.setItem("md-notes-theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     if (!notice) return;
@@ -166,7 +177,14 @@ export default function App() {
             <button className={historyOpen ? "tool-button active" : "tool-button"} onClick={() => setHistoryOpen((open) => !open)}><Clock3 size={17} /> History</button>
             <button className="tool-button accent" onClick={() => setShareOpen(true)}><Share2 size={17} /> Share</button>
             <button className="icon-button" onClick={deleteNote} disabled={notes.length === 1} aria-label="Delete note"><Trash2 size={18} /></button>
-            <button className="icon-button" aria-label="More options"><MoreHorizontal size={19} /></button>
+            <button
+              className="icon-button"
+              onClick={() => setTheme((current) => current === "light" ? "dark" : "light")}
+              aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+              title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            >
+              {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
           </div>
         </header>
 

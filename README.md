@@ -1,8 +1,8 @@
-# Paper Trail
+# md-notes
 
-Paper Trail is a local Markdown notes app for the desktop. Its interface is inspired by iOS Notes, while the editor switches each line between Markdown source and rendered preview.
+md-notes is a local Markdown notes app for the desktop. Its interface is inspired by iOS Notes, while the editor switches each line between Markdown source and rendered preview.
 
-![Paper Trail main view](docs/screenshots/main-editor.png)
+![md-notes main view](docs/screenshots/main-editor.png)
 
 ## MVP Features
 
@@ -10,12 +10,15 @@ Paper Trail is a local Markdown notes app for the desktop. Its interface is insp
 - Line-based Markdown editor with live rendering
 - The active line remains editable as Markdown
 - Notes list, search, and local storage
+- System-aware light and dark themes with a persistent manual toggle
 - Automatic versions after short editing pauses
 - Visual comparison and restoration
 - Account-free sharing through portable share codes
 - Line-by-line conflict resolution when importing changed notes
 
 ![Visual version comparison](docs/screenshots/version-history.png)
+
+![md-notes dark mode](docs/screenshots/dark-mode.png)
 
 ## Quick Start
 

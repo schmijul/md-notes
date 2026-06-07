@@ -28,22 +28,26 @@ The top toolbar contains only global actions:
 - Open History
 - Share the note
 - Delete the note
+- Switch between light and dark mode
 
 ## Visual System
 
 The design is inspired by iOS Notes without copying it:
 
-- Warm paper white instead of pure white
+- Clean white and cool grey surfaces in light mode
 - Serif type for content and headings
-- Subtle yellow for active and primary elements
+- Muted slate blue for active and primary elements
+- A matching dark palette that follows the system preference on first use
 - Few persistent borders
 - Small status details and a spacious writing area
+
+![Dark mode](screenshots/dark-mode.png)
 
 ## Versions
 
 ![Version comparison](screenshots/version-history.png)
 
-History opens as a side panel so the current text remains visible. Changed lines receive a warm background. Restoring is non-destructive: the current state is saved again before the selected version is restored.
+History opens as a side panel so the current text remains visible. Changed lines receive a subtle blue background. Restoring is non-destructive: the current state is saved again before the selected version is restored.
 
 ## Sharing
 

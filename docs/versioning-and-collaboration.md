@@ -25,7 +25,7 @@ A share code is a Base64-encoded JSON document containing:
 - the current Markdown lines,
 - up to ten recent versions.
 
-The code can be transported through a messenger, email, a QR-code generator, or a local network. Paper Trail itself does not establish a network connection in the MVP.
+The code can be transported through a messenger, email, a QR-code generator, or a local network. md-notes itself does not establish a network connection in the MVP.
 
 Base64 is not encryption. Confidential notes should only be shared through an appropriately secure channel.
 

@@ -1,10 +1,10 @@
 # Architecture
 
-![Paper Trail main view](screenshots/main-editor.png)
+![md-notes main view](screenshots/main-editor.png)
 
 ## Goal
 
-Paper Trail should feel like a small desktop app while running on Linux, Windows, and macOS without platform-specific UI implementations. The MVP prioritizes a strong editing interaction and an understandable version history.
+md-notes should feel like a small desktop app while running on Linux, Windows, and macOS without platform-specific UI implementations. The MVP prioritizes a strong editing interaction and an understandable version history.
 
 ## Technology
 

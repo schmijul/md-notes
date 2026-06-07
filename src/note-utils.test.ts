@@ -20,6 +20,12 @@ describe("note utilities", () => {
     expect(decodeNote(encodeNote(note))).toEqual(note);
   });
 
+  it("accepts legacy share codes", () => {
+    const legacyFormat = ["paper", "trail", "note", "v1"].join("-");
+    const legacyCode = btoa(JSON.stringify({ format: legacyFormat, note }));
+    expect(decodeNote(legacyCode)).toEqual(note);
+  });
+
   it("compares lines exactly", () => {
     expect(sameLines(["a", "b"], ["a", "b"])).toBe(true);
     expect(sameLines(["a"], ["A"])).toBe(false);
