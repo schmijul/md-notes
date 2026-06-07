@@ -1,5 +1,5 @@
 import { listen } from "@tauri-apps/api/event";
-import { Clock3, FilePlus2, FolderOpen, Moon, Network, PanelLeftClose, PanelLeftOpen, Save, SaveAll, Search, Share2, Sun, Trash2 } from "lucide-react";
+import { Clock3, FilePlus2, FolderOpen, Moon, Network, PanelLeftClose, PanelLeftOpen, Save, SaveAll, Search, Share2, Sun, Table2, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ConflictDialog } from "./ConflictDialog";
 import { chooseMarkdownPath, openMarkdownFile, writeMarkdownFile } from "./file-api";
@@ -45,6 +45,7 @@ export default function App() {
     return saved || crypto.randomUUID().replaceAll("-", "");
   });
   const [syncing, setSyncing] = useState(false);
+  const [tableInsertRequest, setTableInsertRequest] = useState(0);
   const [syncError, setSyncError] = useState("");
   const [syncStatus, setSyncStatus] = useState("Saved locally");
   const [theme, setTheme] = useState<"light" | "dark">(() => {
@@ -321,6 +322,7 @@ export default function App() {
           </button>
           <div className="toolbar-center"><span className="save-dot" /> {syncStatus}</div>
           <div className="toolbar-actions">
+            <button className="tool-button" aria-label="Insert table" title="Insert Markdown table" onClick={() => setTableInsertRequest((request) => request + 1)}><Table2 size={17} /><span>Table</span></button>
             <button className="tool-button file-button" aria-label="Open Markdown file" title="Open Markdown file" onClick={openFile}><FolderOpen size={17} /><span>Open</span></button>
             <button className="tool-button file-button" aria-label="Save Markdown file" title="Save Markdown file" onClick={() => saveFile()}><Save size={17} /><span>Save</span></button>
             <button className="tool-button file-button" aria-label="Save Markdown file as" title="Save Markdown file as" onClick={() => saveFile(true)}><SaveAll size={17} /><span>Save as</span></button>
@@ -349,6 +351,7 @@ export default function App() {
               key={selectedNote.id}
               lines={selectedNote.lines}
               sourcePath={selectedNote.sourcePath}
+              tableInsertRequest={tableInsertRequest}
               onChange={updateLines}
             />
           </article>

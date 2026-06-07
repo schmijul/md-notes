@@ -2,11 +2,13 @@ import { convertFileSrc } from "@tauri-apps/api/core";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { findMarkdownTables, insertMarkdownTable } from "./note-utils";
 
 type Props = {
   lines: string[];
   onChange: (lines: string[]) => void;
   sourcePath?: string;
+  tableInsertRequest: number;
 };
 
 function resolveImageSource(src: string | undefined, sourcePath: string | undefined) {
@@ -28,9 +30,12 @@ function resolveImageSource(src: string | undefined, sourcePath: string | undefi
   return convertFileSrc(imagePath);
 }
 
-export function LineEditor({ lines, onChange, sourcePath }: Props) {
+export function LineEditor({ lines, onChange, sourcePath, tableInsertRequest }: Props) {
   const [activeLine, setActiveLine] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const handledTableRequest = useRef(tableInsertRequest);
+  const selectTableHeading = useRef(false);
+  const tables = findMarkdownTables(lines);
 
   useEffect(() => {
     setActiveLine((current) => Math.min(current, Math.max(lines.length - 1, 0)));
@@ -41,7 +46,20 @@ export function LineEditor({ lines, onChange, sourcePath }: Props) {
     if (!textarea) return;
     textarea.style.height = "0";
     textarea.style.height = `${Math.max(textarea.scrollHeight, 34)}px`;
+    if (selectTableHeading.current) {
+      textarea.setSelectionRange(2, 10);
+      selectTableHeading.current = false;
+    }
   }, [activeLine, lines]);
+
+  useEffect(() => {
+    if (tableInsertRequest === handledTableRequest.current) return;
+    handledTableRequest.current = tableInsertRequest;
+    const result = insertMarkdownTable(lines, activeLine);
+    selectTableHeading.current = true;
+    onChange(result.lines);
+    setActiveLine(result.activeLine);
+  }, [tableInsertRequest]);
 
   function updateLine(value: string) {
     const next = [...lines];
@@ -86,7 +104,16 @@ export function LineEditor({ lines, onChange, sourcePath }: Props) {
 
   return (
     <div className="line-editor" aria-label="Markdown editor">
-      {lines.map((line, index) => (
+      {lines.map((line, index) => {
+        const table = tables.find(({ start, end }) => index >= start && index <= end);
+        const tableIsActive = table && activeLine >= table.start && activeLine <= table.end;
+        if (table && index > table.start && !tableIsActive) return null;
+
+        const renderedMarkdown = table && !tableIsActive
+          ? lines.slice(table.start, table.end + 1).join("\n")
+          : line;
+
+        return (
         <div className={`editor-line ${index === activeLine ? "active" : ""}`} key={index}>
           {index === activeLine ? (
             <textarea
@@ -100,15 +127,19 @@ export function LineEditor({ lines, onChange, sourcePath }: Props) {
               onKeyDown={handleKeyDown}
             />
           ) : (
-            <button className="rendered-line" type="button" onClick={() => setActiveLine(index)}>
-              {line ? (
+            <button
+              className={`rendered-line ${table && !tableIsActive ? "table-block" : ""}`}
+              type="button"
+              onClick={() => setActiveLine(index)}
+            >
+              {renderedMarkdown ? (
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
                     img: ({ src, ...props }) => <img {...props} src={resolveImageSource(src, sourcePath)} />,
                   }}
                 >
-                  {line}
+                  {renderedMarkdown}
                 </ReactMarkdown>
               ) : (
                 <span className="empty-line">Click to write</span>
@@ -116,7 +147,8 @@ export function LineEditor({ lines, onChange, sourcePath }: Props) {
             </button>
           )}
         </div>
-      ))}
+        );
+      })}
       <button
         type="button"
         className="add-line"

@@ -118,6 +118,10 @@ h1, h2, h3, p { margin-top: 0; }
 .rendered-line code { padding: 2px 4px; border-radius: 4px; background: var(--code); font-size: .85em; }
 .rendered-line a { color: var(--accent-strong); }
 .rendered-line img { display: block; max-width: 100%; height: auto; margin: 8px 0; border-radius: 8px; }
+.rendered-line.table-block { margin: 6px 0; overflow-x: auto; }
+.rendered-line table { width: 100%; border-collapse: collapse; color: var(--ink); font-family: var(--font-text); font-size: 14px; }
+.rendered-line th, .rendered-line td { padding: 8px 10px; border: 1px solid var(--line); text-align: left; }
+.rendered-line th { background: var(--surface-subtle); font-weight: 600; }
 .empty-line { color: transparent; font-size: 12px; }
 .editor-line:hover .empty-line { color: var(--subtle); }
 .add-line { margin-top: 15px; padding: 5px 0; border: 0; color: transparent; background: transparent; cursor: text; font-size: 11px; }

@@ -56,6 +56,18 @@ export function sameLines(a: string[], b: string[]) {
   return a.length === b.length && a.every((line, index) => line === b[index]);
 }
 
+export function insertMarkdownTable(lines: string[], activeLine: number) {
+  const table = [
+    "| Column 1 | Column 2 | Column 3 |",
+    "| --- | --- | --- |",
+    "| Cell | Cell | Cell |",
+  ];
+  const insertAt = lines[activeLine] ? activeLine + 1 : activeLine;
+  const next = [...lines];
+  next.splice(insertAt, lines[activeLine] ? 0 : 1, ...table);
+  return { lines: next, activeLine: insertAt };
+}
+
 export function splitMarkdown(content: string) {
   return {
     lines: content.split(/\r?\n/),
@@ -65,4 +77,26 @@ export function splitMarkdown(content: string) {
 
 export function joinMarkdown(lines: string[], lineEnding = "\n") {
   return lines.join(lineEnding);
+}
+
+export function findMarkdownTables(lines: string[]) {
+  const tables: Array<{ start: number; end: number }> = [];
+
+  for (let start = 0; start < lines.length - 1; start += 1) {
+    const separator = lines[start + 1].trim();
+    const cells = separator.replace(/^\|/, "").replace(/\|$/, "").split("|");
+    const isSeparator = separator.includes("|")
+      && cells.every((cell) => /^:?-{3,}:?$/.test(cell.trim()));
+    if (!lines[start].includes("|") || !isSeparator) continue;
+
+    let end = start + 1;
+    while (end + 1 < lines.length && lines[end + 1].includes("|") && lines[end + 1].trim()) {
+      end += 1;
+    }
+
+    tables.push({ start, end });
+    start = end;
+  }
+
+  return tables;
 }
