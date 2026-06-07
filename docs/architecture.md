@@ -24,6 +24,7 @@ src/
   HistoryPanel.tsx        Versions and visual comparison
   ShareDialog.tsx         Share-code creation and import
   ConflictDialog.tsx      Line-by-line conflict resolution
+  file-api.ts             Native Markdown file dialogs and commands
   note-utils.ts           Titles, previews, versions, and codes
   storage.ts              Local storage and sample data
   styles.css              Complete visual system
@@ -35,7 +36,7 @@ docs/                      Product and technical documentation
 
 ## Data Model
 
-A note contains a stable ID, timestamps, an array of Markdown lines, and up to 40 local versions. Each version contains a copy of the lines, a timestamp, and a short label.
+A note contains a stable ID, timestamps, an array of Markdown lines, and up to 40 local versions. Each version contains a copy of the lines, a timestamp, and a short label. Notes opened from disk also keep their source path and line-ending style.
 
 Line-based storage is intentionally direct: it matches the editor interaction and makes comparisons and conflict decisions understandable. This MVP does not need a more complex document model.
 
@@ -49,7 +50,7 @@ Line-based storage is intentionally direct: it matches the editor interaction an
 
 ## Native Boundary
 
-The Rust side currently only starts the Tauri window. This is intentionally minimal. File-system access, export, and a LAN service can later be added behind clearly defined Tauri commands without rebuilding the editor components.
+Ordinary Markdown files use the native Tauri open/save dialogs. Two focused commands read UTF-8 text from a selected path and write it back. The React note keeps the selected path and original LF or CRLF line ending, while its local copy and version history continue to use WebView `localStorage`.
 
 ## Portability
 

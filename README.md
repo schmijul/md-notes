@@ -10,11 +10,14 @@ md-notes is a local Markdown notes app for the desktop. Its focused interface le
 - Line-based Markdown editor with live rendering
 - The active line remains editable as Markdown
 - Notes list, search, and local storage
+- Open, edit, save, and save-as support for ordinary Markdown files
 - System-aware light and dark themes with a persistent manual toggle
 - Automatic versions after short editing pauses
 - Visual comparison and restoration
 - Account-free sharing through portable share codes
 - Line-by-line conflict resolution when importing changed notes
+
+![Opening and saving Markdown files](docs/screenshots/markdown-files.png)
 
 ![Visual version comparison](docs/screenshots/version-history.png)
 
@@ -69,13 +72,16 @@ npm run build
 1. Click a rendered line to edit its Markdown source.
 2. Press `Enter` to create a new line. The previous line is rendered immediately.
 3. Open **History** to compare and restore earlier versions.
-4. Open **Share** to copy a portable code or import a code you received.
+4. Use **Open**, **Save**, or **Save as** to work with ordinary `.md` files in the desktop app.
+5. Open **Share** to copy a portable code or import a code you received.
 
 ![Account-free sharing with a share code](docs/screenshots/share-code.png)
 
 ## Storage
 
-The MVP stores notes in the Tauri app's local WebView storage. There is no server, account, or telemetry. A share code contains the note text and up to ten recent versions; anyone who has the code can read that data.
+The app stores its internal notes as JSON in the Tauri WebView's `localStorage` under the key `md-notes-v1`. The exact on-disk WebView storage directory is platform-specific and is managed by the operating system and WebView runtime.
+
+Markdown files opened or saved through the desktop toolbar remain ordinary user-selected `.md` files. The app also keeps its local note copy and version history in `localStorage`. There is no server, account, or telemetry. A share code contains the note text and up to ten recent versions; anyone who has the code can read that data.
 
 ## Documentation
 
@@ -87,7 +93,7 @@ The MVP stores notes in the Tauri app's local WebView storage. There is no serve
 
 - Share codes are snapshots and do not synchronize automatically.
 - Real-time LAN collaboration is not included yet.
-- Local storage does not yet use a user-selectable Markdown file directory.
+- Markdown files are opened and saved individually; folder-based note libraries are not included yet.
 - Mobile builds are architecturally possible but are outside this MVP.
 - AppImage packaging is not part of the verified Linux build; `.deb` and `.rpm` are verified.
 

@@ -25,6 +25,8 @@ The left column contains search and the notes list. The active note is highlight
 The top toolbar contains only global actions:
 
 - Show or hide the sidebar
+- Open a Markdown file
+- Save or save a Markdown file under a new name
 - Open History
 - Share the note
 - Delete the note
@@ -54,6 +56,12 @@ History opens as a side panel so the current text remains visible. Changed lines
 ![Share-code dialog](screenshots/share-code.png)
 
 The dialog separates **Send** and **Receive**. It clearly explains that the code contains readable note data and does not provide automatic synchronization. This avoids false expectations about privacy or real-time collaboration.
+
+## Markdown Files
+
+![Opening and saving Markdown files](screenshots/markdown-files.png)
+
+The desktop toolbar can open ordinary `.md` and `.markdown` files. **Save** writes an opened file back to its existing path; **Save as** asks for a new path. Internal notes can also be exported through either save action. File dialogs are native desktop functionality and are not available in the browser-only development view.
 
 ## Accessibility
 

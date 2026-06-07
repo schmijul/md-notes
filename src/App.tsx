@@ -1,12 +1,17 @@
-import { Clock3, FilePlus2, Moon, PanelLeftClose, PanelLeftOpen, Search, Share2, Sun, Trash2 } from "lucide-react";
+import { Clock3, FilePlus2, FolderOpen, Moon, PanelLeftClose, PanelLeftOpen, Save, SaveAll, Search, Share2, Sun, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ConflictDialog } from "./ConflictDialog";
+import { chooseMarkdownPath, openMarkdownFile, writeMarkdownFile } from "./file-api";
 import { HistoryPanel } from "./HistoryPanel";
 import { LineEditor } from "./LineEditor";
-import { decodeNote, makeVersion, notePreview, noteTitle, sameLines } from "./note-utils";
+import { decodeNote, joinMarkdown, makeVersion, notePreview, noteTitle, sameLines, splitMarkdown } from "./note-utils";
 import { ShareDialog } from "./ShareDialog";
 import { loadNotes, saveNotes } from "./storage";
 import type { Note, NoteVersion } from "./types";
+
+function isTauri() {
+  return "__TAURI_INTERNALS__" in window;
+}
 
 function formatListDate(date: string) {
   const value = new Date(date);
@@ -85,6 +90,54 @@ export default function App() {
     setSelectedId(note.id);
     setQuery("");
     setHistoryOpen(false);
+  }
+
+  async function openFile() {
+    if (!isTauri()) {
+      setNotice("File access is available in the desktop app");
+      return;
+    }
+    try {
+      const file = await openMarkdownFile();
+      if (!file) return;
+      const now = new Date().toISOString();
+      const markdown = splitMarkdown(file.content);
+      const note: Note = {
+        id: crypto.randomUUID(),
+        createdAt: now,
+        updatedAt: now,
+        lines: markdown.lines,
+        versions: [],
+        sourcePath: file.path,
+        lineEnding: markdown.lineEnding,
+      };
+      setNotes((current) => [note, ...current]);
+      setSelectedId(note.id);
+      setQuery("");
+      setHistoryOpen(false);
+      setNotice("Markdown file opened");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : String(error));
+    }
+  }
+
+  async function saveFile(saveAs = false) {
+    if (!isTauri()) {
+      setNotice("File access is available in the desktop app");
+      return;
+    }
+    try {
+      const suggestedName = `${noteTitle(selectedNote.lines).replace(/[\\/:*?"<>|]/g, "-") || "note"}.md`;
+      const path = saveAs || !selectedNote.sourcePath
+        ? await chooseMarkdownPath(selectedNote.sourcePath ?? suggestedName)
+        : selectedNote.sourcePath;
+      if (!path) return;
+      await writeMarkdownFile(path, joinMarkdown(selectedNote.lines, selectedNote.lineEnding));
+      setNotes((current) => current.map((note) => note.id === selectedNote.id ? { ...note, sourcePath: path } : note));
+      setNotice("Markdown file saved");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : String(error));
+    }
   }
 
   function deleteNote() {
@@ -174,6 +227,9 @@ export default function App() {
           </button>
           <div className="toolbar-center"><span className="save-dot" /> Saved locally</div>
           <div className="toolbar-actions">
+            <button className="tool-button file-button" aria-label="Open Markdown file" title="Open Markdown file" onClick={openFile}><FolderOpen size={17} /> Open</button>
+            <button className="tool-button file-button" aria-label="Save Markdown file" title="Save Markdown file" onClick={() => saveFile()}><Save size={17} /> Save</button>
+            <button className="tool-button file-button" aria-label="Save Markdown file as" title="Save Markdown file as" onClick={() => saveFile(true)}><SaveAll size={17} /> Save as</button>
             <button className={historyOpen ? "tool-button active" : "tool-button"} onClick={() => setHistoryOpen((open) => !open)}><Clock3 size={17} /> History</button>
             <button className="tool-button accent" onClick={() => setShareOpen(true)}><Share2 size={17} /> Share</button>
             <button className="icon-button" onClick={deleteNote} disabled={notes.length === 1} aria-label="Delete note"><Trash2 size={18} /></button>

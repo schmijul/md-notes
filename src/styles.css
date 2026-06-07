@@ -97,7 +97,7 @@ h1, h2, h3, p { margin-top: 0; }
 .save-dot { display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: #77a66e; }
 .toolbar-actions { display: flex; align-items: center; justify-content: flex-end; gap: 5px; }
 .tool-button, .primary-button, .secondary-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; border-radius: 10px; cursor: pointer; }
-.tool-button { height: 34px; padding: 0 11px; border: 0; color: var(--muted); background: transparent; font-size: 12px; }
+.tool-button { height: 34px; padding: 0 11px; border: 0; color: var(--muted); background: transparent; font-size: 12px; white-space: nowrap; }
 .tool-button:hover, .tool-button.active { background: var(--hover); }
 .tool-button.accent { color: var(--accent-strong); background: var(--accent-soft); }
 .editor-scroll { flex: 1; overflow: auto; background: linear-gradient(90deg, var(--editor-edge), var(--paper) 15%, var(--paper) 85%, var(--editor-edge)); }
@@ -187,4 +187,8 @@ h1, h2, h3, p { margin-top: 0; }
   .app-shell { grid-template-columns: 260px minmax(0, 1fr); }
   .history-open .editor-scroll { padding-right: 0; }
   .tool-button { padding: 0 8px; }
+}
+
+@media (max-width: 500px) {
+  .file-button { display: none; }
 }

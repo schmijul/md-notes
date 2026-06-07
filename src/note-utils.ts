@@ -55,3 +55,14 @@ export function decodeNote(code: string): Note {
 export function sameLines(a: string[], b: string[]) {
   return a.length === b.length && a.every((line, index) => line === b[index]);
 }
+
+export function splitMarkdown(content: string) {
+  return {
+    lines: content.split(/\r?\n/),
+    lineEnding: content.includes("\r\n") ? "\r\n" as const : "\n" as const,
+  };
+}
+
+export function joinMarkdown(lines: string[], lineEnding = "\n") {
+  return lines.join(lineEnding);
+}
